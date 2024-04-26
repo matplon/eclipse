@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -132,11 +133,16 @@ public class Main extends Application {
                 }
                 else{
                     for(Spaceship spaceship : spaceships){
-                        Circle circle = new Circle(spaceship.getX(), spaceship.getY(), 10);
+                        Circle circle = new Circle(spaceship.getX(), spaceship.getY(), 20);
+                        circle.setFill(Color.TRANSPARENT);
+                        circle.setStroke(Color.TRANSPARENT);
+                        root.getChildren().add(circle);
                         if(circle.contains(point2D)){
+                            System.out.println("lol");
                             chosenShip = spaceship;
                             break;
                         }
+                        root.getChildren().remove(circle);
                     }
                 }
             }
@@ -148,11 +154,23 @@ public class Main extends Application {
             }
             if(keyEvent.getCode() == KeyCode.ENTER && chosenSector != null){
                 chosenSector = null;
-                phase = Phase.SHIPS;
+                if(player == 1){
+                    player = 2;
+                }
+                else{
+                    phase = Phase.SHIPS;
+                    player = 1;
+                }
             }
             if(keyEvent.getCode() == KeyCode.ENTER && phase == Phase.SHIPS){
                 chosenShip = null;
-                phase = Phase.BATTLES;
+                if(player == 1){
+                    player = 2;
+                }
+                else{
+                    player = 1;
+                    phase = Phase.BATTLES;
+                }
             }
             if(keyEvent.getCode() == KeyCode.E && phase == Phase.SHIPS && chosenShip == null && numOfShipsToDeploy.get(player-1) > 0){
                 System.out.println("deploying...");
