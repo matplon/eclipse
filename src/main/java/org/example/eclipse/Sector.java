@@ -98,7 +98,7 @@ public class Sector extends BetterPolygon {
         for(Side side : sides){
             if(side.hasWormhole){
                 wormholeSides.add(sides.indexOf(side));
-                Main.root.getChildren().remove(side.wormhole);
+                Main.root.getChildren().remove(side.wormholeV2);
             }
         }
         sides.clear();

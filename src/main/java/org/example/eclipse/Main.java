@@ -27,7 +27,7 @@ public class Main extends Application {
     static List<Sector> sectors = new ArrayList<>();
     List<Spaceship> spaceships = new ArrayList<>();
     List<Integer> numOfShipsToDeploy = new ArrayList<>();
-    Phase phase = Phase.SHIPS;
+    Phase phase = Phase.SECTORS;
     int player = 1;
     Sector chosenSector;
     Spaceship chosenShip;
