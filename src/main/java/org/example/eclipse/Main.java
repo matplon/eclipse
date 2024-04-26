@@ -42,10 +42,12 @@ public class Main extends Application {
         keyEvents();
         numOfShipsToDeploy.add(5);
         numOfShipsToDeploy.add(5);
+        HUD.init();
     }
 
     public void generateSectors() {
         Sector sector = new Sector(WIDTH / 2, HEIGHT / 2);
+        sectors.add(sector);
         sector.show();
         sector.generateNeighbours();
         for (Sector neighbour : sector.neighbours) {
@@ -105,8 +107,7 @@ public class Main extends Application {
                         if(Sector.ifConnect(chosenShip.sector, sector)){
                             root.getChildren().remove(chosenShip);
                             chosenShip.sector.spaceships.remove(chosenShip);
-                            chosenShip.setX(x);
-                            chosenShip.setY(y);
+                            chosenShip.moveTo(x, y);
                             chosenShip.sector = sector;
                             sector.spaceships.add(chosenShip);
                             root.getChildren().add(chosenShip);
@@ -128,21 +129,14 @@ public class Main extends Application {
                         sector.spaceships.add(ship);
                         deployingShip = false;
                         root.getChildren().add(ship);
-                        System.out.println("deployed!");
                     }
                 }
                 else{
                     for(Spaceship spaceship : spaceships){
-                        Circle circle = new Circle(spaceship.getX(), spaceship.getY(), 20);
-                        circle.setFill(Color.TRANSPARENT);
-                        circle.setStroke(Color.TRANSPARENT);
-                        root.getChildren().add(circle);
-                        if(circle.contains(point2D)){
-                            System.out.println("lol");
+                        if(spaceship.getLayoutBounds().contains(point2D)){
                             chosenShip = spaceship;
                             break;
                         }
-                        root.getChildren().remove(circle);
                     }
                 }
             }
@@ -152,28 +146,30 @@ public class Main extends Application {
             if(keyEvent.getCode() == KeyCode.R && chosenSector != null){
                 chosenSector.spin(60);
             }
-            if(keyEvent.getCode() == KeyCode.ENTER && chosenSector != null){
+            else if(keyEvent.getCode() == KeyCode.ENTER && chosenSector != null){
                 chosenSector = null;
                 if(player == 1){
                     player = 2;
+                    HUD.update(player, phase);
                 }
                 else{
-                    phase = Phase.SHIPS;
                     player = 1;
+                    phase = Phase.SHIPS;
+                    HUD.update(player, phase);
                 }
             }
-            if(keyEvent.getCode() == KeyCode.ENTER && phase == Phase.SHIPS){
-                chosenShip = null;
+            else if(keyEvent.getCode() == KeyCode.ENTER && phase == Phase.SHIPS && chosenShip == null){
                 if(player == 1){
                     player = 2;
+                    HUD.update(player, phase);
                 }
                 else{
                     player = 1;
                     phase = Phase.BATTLES;
+                    HUD.update(player, phase);
                 }
             }
-            if(keyEvent.getCode() == KeyCode.E && phase == Phase.SHIPS && chosenShip == null && numOfShipsToDeploy.get(player-1) > 0){
-                System.out.println("deploying...");
+            else if(keyEvent.getCode() == KeyCode.E && phase == Phase.SHIPS && chosenShip == null && numOfShipsToDeploy.get(player-1) > 0){
                 deployingShip = true;
                 numOfShipsToDeploy.set(player-1, numOfShipsToDeploy.get(player-1)-1);
             }

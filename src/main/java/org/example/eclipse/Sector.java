@@ -2,9 +2,7 @@ package org.example.eclipse;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Sector extends BetterPolygon {
     static List<Double> points = List.of(-10.0, 4.0, -9.0, 4.0, -8.5, 4.87, -9.0, 5.73, -10.0, 5.73, -10.5, 4.87);
@@ -19,7 +17,7 @@ public class Sector extends BetterPolygon {
         scale(RADIUS / getRadius());
         moveTo(centerX, centerY);
         setFill(Color.TRANSPARENT);
-        setStroke(Color.BLACK);
+        setStroke(Color.WHITE);
         generateSides();
         checkForNeighbours();
     }
@@ -99,7 +97,7 @@ public class Sector extends BetterPolygon {
         for(Side side : sides){
             if(side.hasWormhole){
                 wormholeSides.add(sides.indexOf(side));
-                Main.root.getChildren().remove(side.wormholeV2);
+                Main.root.getChildren().remove(side.wormhole);
             }
         }
         sides.clear();
@@ -119,16 +117,29 @@ public class Sector extends BetterPolygon {
     }
 
     static public boolean ifConnect(Sector sector1, Sector sector2){
-        if(sector1.equals(sector2)) return true;
-        if(sector1.neighbours.contains(sector2)){
-            for(Side side1 : sector1.sides){
-                for(Side side2 : sector2.sides){
-                    if(Math.round(side1.getStartX()) == Math.round(side2.getStartX()) &&
-                            Math.round(side1.getStartY()) == Math.round(side2.getStartY()) &&
-                            Math.round(side1.getEndX()) == Math.round(side2.getEndX()) &&
-                            Math.round(side1.getEndY()) == Math.round(side2.getEndY())){
-                        return (side1.hasWormhole && side2.hasWormhole);
-                    }
+        if(sector1.equals(sector2) || areWormholeConnected(sector1, sector2)) return true;
+        List<Sector> visited = new ArrayList<>();
+        DFS(sector1, visited);
+        return visited.contains(sector2);
+    }
+
+    private static void DFS(Sector current, List<Sector> visited){
+        visited.add(current);
+        for(Sector neighbour : current.neighbours){
+            if(!visited.contains(neighbour) && !neighbour.isHidden && areWormholeConnected(current, neighbour)) DFS(neighbour, visited);
+        }
+    }
+
+    private static boolean areWormholeConnected(Sector sector1, Sector sector2){
+        if(!sector1.neighbours.contains(sector2)) return false;
+        for(Side side1 : sector1.sides){
+            for(Side side2 : sector2.sides){
+                double side1MidX = Math.round((side1.getStartX() + side1.getEndX())/2);
+                double side1MidY = Math.round((side1.getStartY() + side1.getEndY())/2);
+                double side2MidX = Math.round((side2.getStartX() + side2.getEndX())/2);
+                double side2MidY = Math.round((side2.getStartY() + side2.getEndY())/2);
+                if(side1MidX == side2MidX && side1MidY == side2MidY){
+                    return side1.hasWormhole && side2.hasWormhole;
                 }
             }
         }
