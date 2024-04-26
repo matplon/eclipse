@@ -10,11 +10,11 @@ public class Spaceship extends ImageView {
     int player;
     Sector sector;
     public Spaceship(double centerX, double centerY, int player, Sector sector){
-        super(new Image(filepath));
+        super(new Image("file:"+filepath));
         setX(centerX);
         setY(centerY);
-        setFitWidth(15);
-        setFitHeight(15);
+        setFitWidth(40);
+        setFitHeight(40);
         this.player = player;
         this.sector = sector;
     }

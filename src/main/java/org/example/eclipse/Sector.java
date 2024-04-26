@@ -64,6 +64,7 @@ public class Sector extends BetterPolygon {
 
     public void show() {
         Main.root.getChildren().add(this);
+        isHidden = false;
         for (Side side : sides) {
             if (side.hasWormhole) side.showWormhole();
         }
