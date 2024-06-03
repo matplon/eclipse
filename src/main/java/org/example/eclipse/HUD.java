@@ -2,15 +2,23 @@ package org.example.eclipse;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class HUD {
     static Font font = Font.font("Roboto", 30);
     static Text currentPlayer = new Text();
     static Text currentPhase = new Text();
+    static ImageView dice;
+    static Button roll = new Button("Roll");
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -31,6 +39,10 @@ public class HUD {
 
     public static void update(int player, Main.Phase phase){
         currentPlayer.setText("Turn: Player "+player);
+        if(phase == Main.Phase.BATTLES){
+            currentPlayer.setVisible(false);
+        }
+        else currentPlayer.setVisible(true);
         if(player == 1){
             currentPlayer.setStroke(Color.BLUE);
             currentPhase.setStroke(Color.BLUE);
@@ -50,11 +62,11 @@ public class HUD {
         }
         else{
             currentPhase.setText("Battle");
+            Main.startBattles();
         }
     }
 
     public static void invalidSector(){
-        System.out.println("lol");
         Text text = new Text("Invalid sector");
         text.setFont(font);
         text.setStroke(Color.GREEN);

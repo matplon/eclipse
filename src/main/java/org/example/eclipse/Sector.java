@@ -94,6 +94,50 @@ public class Sector extends BetterPolygon {
         }
     }
 
+    public void battle(){
+        if(spaceships.size() < 2){
+            return;
+        }
+        int player1Count = 0;
+        int player2Count = 0;
+        for(Spaceship spaceship : spaceships){
+            if(spaceship.player == 1) player1Count++;
+            else player2Count++;
+        }
+        if(player1Count > 0 && player2Count > 0){
+            while(player1Count > 0 && player2Count > 0){
+                Spaceship player1 = spaceships.get(0);
+                Spaceship player2 = null;
+                for (int i = 1; i < spaceships.size(); i++) {
+                    if(spaceships.get(i).player != player1.player){
+                        player2 = spaceships.get(i);
+                        break;
+                    }
+                }
+                int winner = actuallyBatle(player1.player, player2.player);
+                if(winner == player1.player){
+                    spaceships.remove(player2);
+                    if(player2.player == 1) player1Count--;
+                    else player2Count--;
+                }
+                else if(winner == player2.player){
+                    spaceships.remove(player1);
+                    if(player1.player == 1) player1Count--;
+                    else player1Count--;
+                }
+            }
+        }
+    }
+
+    private int actuallyBatle(int firstPlayer, int secondPlayer){
+        Random random = new Random();
+        int face = random.nextInt(1, 7);
+        if(face == 6) return firstPlayer;
+        face = random.nextInt(1,7);
+        if(face == 6) return secondPlayer;
+        return 0;
+    }
+
     public void spin(double angle){
         rotate(angle);
         List<Integer> wormholeSides = new ArrayList<>();

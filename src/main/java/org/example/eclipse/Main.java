@@ -1,5 +1,7 @@
 package org.example.eclipse;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -210,6 +213,12 @@ public class Main extends Application {
             }
             HUD.update(player, phase);
         });
+    }
+
+    public static void startBattles(){
+        for(Sector sector : sectors){
+            sector.battle();
+        }
     }
 
     public static void main(String[] args) {
