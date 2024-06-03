@@ -17,7 +17,11 @@ public class HUD {
     static Font font = Font.font("Roboto", 30);
     static Text currentPlayer = new Text();
     static Text currentPhase = new Text();
-    static Button button = new Button("Battle");
+    static Text currentPoints = new Text();
+    static ImageView dice;
+    static Button roll = new Button("Roll");
+    static int pointsPlayer1;
+    static int pointsPlayer2;
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -32,12 +36,28 @@ public class HUD {
         currentPhase.setX(Main.WIDTH - 400);
         currentPhase.setY(100);
 
-        Main.root.getChildren().addAll(currentPlayer, currentPhase);
+        currentPoints.setText(" ");
+        currentPoints.setFont(font);
+        currentPoints.setStroke(Color.BLUE);
+        currentPoints.setX(Main.WIDTH - 400);
+        currentPoints.setY(150);
+
+        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints);
         Main.scene.setFill(Color.BLACK);
     }
 
     public static void update(int player, Main.Phase phase){
         currentPlayer.setText("Turn: Player "+player);
+        if (player == 1) {
+            currentPoints.setText("Points:"+ " " + pointsPlayer1);
+            currentPoints.setStroke(Color.BLUE);
+
+        }
+        if (player == 2) {
+            currentPoints.setText("Points:"+ " " + pointsPlayer2);
+            currentPoints.setStroke(Color.RED);
+        }
+
         if(phase == Main.Phase.BATTLES){
             currentPlayer.setVisible(false);
         }
@@ -61,7 +81,7 @@ public class HUD {
         }
         else{
             currentPhase.setText("Battle");
-            battle();
+            Main.startBattles();
         }
     }
 
@@ -77,14 +97,5 @@ public class HUD {
         }));
         timeline.setCycleCount(1);
         timeline.play();
-    }
-
-    public static void battle(){
-        button.setLayoutX(50);
-        button.setLayoutY(50);
-        if(!Main.root.getChildren().contains(button)) Main.root.getChildren().add(button);
-        button.setOnAction(actionEvent -> {
-            Main.startBattles();
-        });
     }
 }
