@@ -9,6 +9,9 @@ import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -39,6 +42,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         stage.setScene(scene);
         stage.show();
         generateSectors();

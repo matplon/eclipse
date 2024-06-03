@@ -123,7 +123,7 @@ public class Sector extends BetterPolygon {
                 else if(winner == player2.player){
                     spaceships.remove(player1);
                     if(player1.player == 1) player1Count--;
-                    else player1Count--;
+                    else player2Count--;
                 }
             }
         }
