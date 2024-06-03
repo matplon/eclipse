@@ -88,7 +88,7 @@ public class Main extends Application {
             if(phase == Phase.STARTING_SECTORS && mouseEvent.getButton() == MouseButton.PRIMARY){
                 Point2D clickPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
                 for(Sector sector : sectors){
-                    if(!sector.isHidden && sector.contains(clickPoint) && sector.player == 0 && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
+                    if(sector.contains(clickPoint) && sector.player == 0 && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
                         sector.setPlayer(player);
                         player++;
                         break;
