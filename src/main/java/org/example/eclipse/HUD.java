@@ -17,7 +17,7 @@ public class HUD {
     static Font font = Font.font("Roboto", 30);
     static Text currentPlayer = new Text();
     static Text currentPhase = new Text();
-    static Button roll = new Button("Roll");
+    static Button button = new Button("Battle");
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -61,7 +61,7 @@ public class HUD {
         }
         else{
             currentPhase.setText("Battle");
-            Main.startBattles();
+            battle();
         }
     }
 
@@ -80,6 +80,8 @@ public class HUD {
     }
 
     public static void battle(){
-        Button button
+        button.setLayoutX(50);
+        button.setLayoutY(50);
+        button.setOnAction();
     }
 }
