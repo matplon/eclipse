@@ -133,6 +133,7 @@ public class Main extends Application {
                         chosenSector.generateNeighbours();
                     }
                     else{
+                        chosenSector = null;
                         HUD.invalidSector();
                     }
                 }

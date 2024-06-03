@@ -82,6 +82,7 @@ public class HUD {
     public static void battle(){
         button.setLayoutX(50);
         button.setLayoutY(50);
+        Main.root.getChildren().add(button);
         button.setOnAction(actionEvent -> {
             Main.startBattles();
         });
