@@ -17,7 +17,6 @@ public class HUD {
     static Font font = Font.font("Roboto", 30);
     static Text currentPlayer = new Text();
     static Text currentPhase = new Text();
-    static ImageView dice;
     static Button roll = new Button("Roll");
 
     public static void init(){
@@ -78,5 +77,9 @@ public class HUD {
         }));
         timeline.setCycleCount(1);
         timeline.play();
+    }
+
+    public static void battle(){
+        Button button
     }
 }
