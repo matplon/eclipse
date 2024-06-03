@@ -3,12 +3,10 @@ package org.example.eclipse;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +15,7 @@ import java.util.List;
 
 public class Main extends Application {
     enum Phase{
+        STARTING_SECTORS,
         SECTORS,
         SHIPS,
         BATTLES
@@ -26,9 +25,10 @@ public class Main extends Application {
     static AnchorPane root = new AnchorPane();
     static Scene scene = new Scene(root, WIDTH, HEIGHT);
     static List<Sector> sectors = new ArrayList<>();
+    static Glow glow = new Glow(1);
     List<Spaceship> spaceships = new ArrayList<>();
     List<Integer> numOfShipsToDeploy = new ArrayList<>();
-    Phase phase = Phase.SECTORS;
+    Phase phase = Phase.STARTING_SECTORS;
     int player = 1;
     Sector chosenSector;
     Spaceship chosenShip;
@@ -69,7 +69,6 @@ public class Main extends Application {
                     sectorsToShow.add(sectorSector);
                 }
             }
-
             for (Sector sectorSector : sectorsToShow) {
                 sectorSector.generateNeighbours();
                 sectorSector.show();
@@ -79,7 +78,26 @@ public class Main extends Application {
 
     public void keyEvents(){
         scene.setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton() == MouseButton.PRIMARY && phase == Phase.SECTORS && chosenSector == null){
+            if(phase == Phase.STARTING_SECTORS && mouseEvent.getButton() == MouseButton.PRIMARY){
+                Point2D clickPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                for(Sector sector : sectors){
+                    if(sector.contains(clickPoint) && sector.player == 0 && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
+                        sector.setPlayer(player);
+                        player++;
+                        break;
+                    }
+                }
+                if(player > 2){
+                    player = 1;
+                    phase = Phase.SECTORS;
+                    for (Sector sector : sectors){
+                        if(!sector.isHidden && sector.player == 0 && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
+                            sector.hide();
+                        }
+                    }
+                }
+            }
+            else if(mouseEvent.getButton() == MouseButton.PRIMARY && phase == Phase.SECTORS && chosenSector == null){
                 double x = mouseEvent.getX(), y = mouseEvent.getY();
                 Point2D point2D = new Point2D(x, y);
                 for(Sector sector : sectors){
@@ -88,8 +106,28 @@ public class Main extends Application {
                     }
                 }
                 if(chosenSector != null){
-                    chosenSector.show();
-                    chosenSector.generateNeighbours();
+                    boolean sectorValid = false;
+                    for(Sector neighbour : chosenSector.neighbours){
+                        if(neighbour.player == player){
+                            sectorValid = true;
+                            break;
+                        }
+                        else{
+                            for(Spaceship spaceship : chosenSector.spaceships){
+                                if(spaceship.player == player){
+                                    sectorValid = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(sectorValid){
+                        chosenSector.show();
+                        chosenSector.generateNeighbours();
+                    }
+                    else{
+                        HUD.invalidSector();
+                    }
                 }
             }
             else if(mouseEvent.getButton() == MouseButton.PRIMARY && phase == Phase.SHIPS){
@@ -104,7 +142,7 @@ public class Main extends Application {
                         }
                     }
                     if(sector != null){
-                        if(Sector.ifConnect(chosenShip.sector, sector)){
+                        if(Sector.ifConnected(chosenShip.sector, sector)){
                             root.getChildren().remove(chosenShip);
                             chosenShip.sector.spaceships.remove(chosenShip);
                             chosenShip.moveTo(x, y);
@@ -140,6 +178,7 @@ public class Main extends Application {
                     }
                 }
             }
+            HUD.update(player, phase);
         });
 
         scene.setOnKeyPressed(keyEvent -> {
@@ -150,29 +189,26 @@ public class Main extends Application {
                 chosenSector = null;
                 if(player == 1){
                     player = 2;
-                    HUD.update(player, phase);
                 }
                 else{
                     player = 1;
                     phase = Phase.SHIPS;
-                    HUD.update(player, phase);
                 }
             }
             else if(keyEvent.getCode() == KeyCode.ENTER && phase == Phase.SHIPS && chosenShip == null){
                 if(player == 1){
                     player = 2;
-                    HUD.update(player, phase);
                 }
                 else{
                     player = 1;
                     phase = Phase.BATTLES;
-                    HUD.update(player, phase);
                 }
             }
             else if(keyEvent.getCode() == KeyCode.E && phase == Phase.SHIPS && chosenShip == null && numOfShipsToDeploy.get(player-1) > 0){
                 deployingShip = true;
                 numOfShipsToDeploy.set(player-1, numOfShipsToDeploy.get(player-1)-1);
             }
+            HUD.update(player, phase);
         });
     }
 

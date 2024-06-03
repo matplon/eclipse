@@ -8,12 +8,15 @@ public class Sector extends BetterPolygon {
     static List<Double> points = List.of(-10.0, 4.0, -9.0, 4.0, -8.5, 4.87, -9.0, 5.73, -10.0, 5.73, -10.5, 4.87);
     static double RADIUS = 60;
     boolean isHidden = true;
+    int player = 0;
+    BetterPolygon background;
     List<Side> sides = new ArrayList<>();
     List<Sector> neighbours = new ArrayList<>();
     List<Spaceship> spaceships = new ArrayList<>();
 
     public Sector(double centerX, double centerY) {
         super(points);
+        setEffect(Main.glow);
         scale(RADIUS / getRadius());
         moveTo(centerX, centerY);
         setFill(Color.TRANSPARENT);
@@ -23,15 +26,7 @@ public class Sector extends BetterPolygon {
     }
 
     private void generateSides() {
-        for (int i = 0; i < getPoints().size(); i += 2) {
-            Side side;
-            if (i < getPoints().size() - 2) {
-                side = new Side(getPoints().get(i), getPoints().get(i + 1), getPoints().get(i + 2), getPoints().get(i + 3));
-            } else {
-                side = new Side(getPoints().get(i), getPoints().get(i + 1), getPoints().get(0), getPoints().get(1));
-            }
-            sides.add(side);
-        }
+        addSides();
         Random random = new Random();
         int wormholeNumber = random.nextInt(1, 6);
         while(wormholeNumber > 0){
@@ -68,6 +63,14 @@ public class Sector extends BetterPolygon {
         }
     }
 
+    public void hide(){
+        Main.root.getChildren().remove(this);
+        isHidden = true;
+        for (Side side : sides) {
+            if (side.hasWormhole) side.hideWormhole();
+        }
+    }
+
     public void generateNeighbours(){
         for(Side side : sides){
             double sideMidX = (side.getStartX() + side.getEndX()) / 2;
@@ -101,6 +104,14 @@ public class Sector extends BetterPolygon {
             }
         }
         sides.clear();
+        addSides();
+        for (int i = 0; i < wormholeSides.size(); i++) {
+            sides.get(wormholeSides.get(i)).addWormhole();
+            sides.get(wormholeSides.get(i)).showWormhole();
+        }
+    }
+
+    private void addSides() {
         for (int i = 0; i < getPoints().size(); i += 2) {
             Side side;
             if (i < getPoints().size() - 2) {
@@ -110,27 +121,10 @@ public class Sector extends BetterPolygon {
             }
             sides.add(side);
         }
-        for (int i = 0; i < wormholeSides.size(); i++) {
-            sides.get(wormholeSides.get(i)).addWormhole();
-            sides.get(wormholeSides.get(i)).showWormhole();
-        }
     }
 
-    static public boolean ifConnect(Sector sector1, Sector sector2){
-        if(sector1.equals(sector2) || areWormholeConnected(sector1, sector2)) return true;
-        List<Sector> visited = new ArrayList<>();
-        DFS(sector1, visited);
-        return visited.contains(sector2);
-    }
-
-    private static void DFS(Sector current, List<Sector> visited){
-        visited.add(current);
-        for(Sector neighbour : current.neighbours){
-            if(!visited.contains(neighbour) && !neighbour.isHidden && areWormholeConnected(current, neighbour)) DFS(neighbour, visited);
-        }
-    }
-
-    private static boolean areWormholeConnected(Sector sector1, Sector sector2){
+    static public boolean ifConnected(Sector sector1, Sector sector2){
+        if(sector1.equals(sector2)) return true;
         if(!sector1.neighbours.contains(sector2)) return false;
         for(Side side1 : sector1.sides){
             for(Side side2 : sector2.sides){
@@ -144,5 +138,15 @@ public class Sector extends BetterPolygon {
             }
         }
         return false;
+    }
+
+    public void setPlayer(int player){
+        this.player = player;
+        background = new BetterPolygon(getPoints());
+        Color color;
+        if(player == 1) color = new Color(0, 0, 1, 0.1);
+        else color = new Color(1, 0,0, 0.1);
+        background.setFill(color);
+        Main.root.getChildren().add(background);
     }
 }

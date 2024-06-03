@@ -1,8 +1,11 @@
 package org.example.eclipse;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class HUD {
     static Font font = Font.font("Roboto", 30);
@@ -13,13 +16,13 @@ public class HUD {
         currentPlayer.setText("Turn: Player 1");
         currentPlayer.setFont(font);
         currentPlayer.setStroke(Color.BLUE);
-        currentPlayer.setX(Main.WIDTH - 300);
+        currentPlayer.setX(Main.WIDTH - 400);
         currentPlayer.setY(50);
 
-        currentPhase.setText("Choose a new sector");
+        currentPhase.setText("Choose your starting sector");
         currentPhase.setFont(font);
         currentPhase.setStroke(Color.BLUE);
-        currentPhase.setX(Main.WIDTH - 300);
+        currentPhase.setX(Main.WIDTH - 400);
         currentPhase.setY(100);
 
         Main.root.getChildren().addAll(currentPlayer, currentPhase);
@@ -36,7 +39,10 @@ public class HUD {
             currentPlayer.setStroke(Color.RED);
             currentPhase.setStroke(Color.RED);
         }
-        if(phase == Main.Phase.SHIPS){
+        if(phase == Main.Phase.STARTING_SECTORS){
+            currentPhase.setText("Choose your starting sector");
+        }
+        else if(phase == Main.Phase.SHIPS){
             currentPhase.setText("Prepare your ships");
         }
         else if(phase == Main.Phase.SECTORS){
@@ -45,5 +51,20 @@ public class HUD {
         else{
             currentPhase.setText("Battle");
         }
+    }
+
+    public static void invalidSector(){
+        System.out.println("lol");
+        Text text = new Text("Invalid sector");
+        text.setFont(font);
+        text.setStroke(Color.GREEN);
+        text.setX(Main.WIDTH / 2 - 50);
+        text.setY(Main.HEIGHT - 50);
+        Main.root.getChildren().add(text);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), actionEvent -> {
+            Main.root.getChildren().remove(text);
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 }

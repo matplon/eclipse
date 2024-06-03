@@ -7,7 +7,7 @@ import javafx.scene.shape.Line;
 
 public class Side extends Line {
     static double RADIUS = 7;
-    static Color COLOR = Color.BLUE;
+    static Color COLOR = Color.PURPLE;
     boolean hasWormhole = false;
     Arc wormhole;
 
@@ -19,11 +19,16 @@ public class Side extends Line {
         Main.root.getChildren().add(wormhole);
     }
 
+    public void hideWormhole(){
+        Main.root.getChildren().remove(wormhole);
+    }
+
     public void addWormhole(){
         hasWormhole = true;
         double x = (getStartX() + getEndX()) / 2;
         double y = (getStartY() + getEndY()) / 2;
         wormhole = new Arc();
+        wormhole.setEffect(Main.glow);
         wormhole.setType(ArcType.ROUND);
         wormhole.setCenterX(x);
         wormhole.setCenterY(y);
