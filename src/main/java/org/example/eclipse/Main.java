@@ -49,8 +49,8 @@ public class Main extends Application {
         stage.show();
         generateSectors();
         keyEvents();
-        numOfShipsToDeploy.add(1);
-        numOfShipsToDeploy.add(1);
+        numOfShipsToDeploy.add(5);
+        numOfShipsToDeploy.add(5);
         HUD.init();
     }
 
@@ -272,7 +272,7 @@ public class Main extends Application {
         root.getChildren().clear();
 
         Text winText = new Text();
-        winText.setText("WINNER WINNER CHICKEN DINNER \n CONGRATULATIONS PLAYER" + " " + player);
+        winText.setText("WINNER WINNER CHICKEN DINNER \n CONGRATULATIONS PLAYER" + " " + player );
         if (player == 1) {
             winText.setStroke(Color.BLUE);
         }
