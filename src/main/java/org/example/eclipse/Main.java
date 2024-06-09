@@ -1,7 +1,5 @@
 package org.example.eclipse;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -15,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,6 +113,7 @@ public class Main extends Application {
                 }
                 if(chosenSector != null){
                     boolean sectorValid = false;
+                    chosenSector.checkForNeighbours();
                     for(Sector neighbour : chosenSector.neighbours){
                         if(neighbour.player == player){
                             sectorValid = true;
@@ -136,22 +134,11 @@ public class Main extends Application {
                     }
                     else{
                         chosenSector = null;
-                        HUD.invalidSector();
+                        HUD.notify("Invalid sector");
                     }
                 }
             }
             else if(mouseEvent.getButton() == MouseButton.PRIMARY && phase == Phase.SHIPS){
-                HUD.priceOfBasicShip.setOnMouseClicked(event -> {
-                    if (player == 1 && HUD.pointsPlayer1 >= 3) {
-                        numOfShipsToDeploy.set(0, numOfShipsToDeploy.get(0) + 1);
-                        HUD.pointsPlayer1 -= 3;
-                    }
-                    if (player == 2 && HUD.pointsPlayer2 >= 3) {
-                        numOfShipsToDeploy.set(1, numOfShipsToDeploy.get(1) + 1);
-                        HUD.pointsPlayer2 -= 3;
-                    }
-                });
-
                 double x = mouseEvent.getX(), y = mouseEvent.getY();
                 Point2D point2D = new Point2D(x, y);
                 if(chosenShip != null){
@@ -184,11 +171,16 @@ public class Main extends Application {
                         }
                     }
                     if(sector != null){
-                        Spaceship ship = new Spaceship(x, y, player, sector);
-                        spaceships.add(ship);
-                        sector.spaceships.add(ship);
-                        deployingShip = false;
-                        root.getChildren().add(ship);
+                        if(sector.player == player){
+                            Spaceship ship = new Spaceship(x, y, player, sector);
+                            spaceships.add(ship);
+                            sector.spaceships.add(ship);
+                            deployingShip = false;
+                            root.getChildren().add(ship);
+                        }
+                        else{
+                            HUD.notify("Invalid sector");
+                        }
                     }
                 }
                 else{

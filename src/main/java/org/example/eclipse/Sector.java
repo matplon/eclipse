@@ -38,7 +38,7 @@ public class Sector extends BetterPolygon {
         }
     }
 
-    private void checkForNeighbours(){
+    public void checkForNeighbours(){
         for(Side side : sides){
             double sideMidX = (side.getStartX() + side.getEndX()) / 2;
             double sideMidY = (side.getStartY() + side.getEndY()) / 2;
@@ -47,7 +47,8 @@ public class Sector extends BetterPolygon {
             double centerX = getCenterX() + 2 * xDiff;
             double centerY = getCenterY() + 2 * yDiff;
             for(Sector sector : Main.sectors){
-                if(Math.round(sector.getCenterX())  == Math.round(centerX) && Math.round(sector.getCenterY()) == Math.round(centerY)){
+                if((Math.floor(sector.getCenterX())  == Math.floor(centerX) || Math.round(sector.getCenterX()) == Math.round(centerX))
+                        && (Math.floor(sector.getCenterY()) == Math.floor(centerY) || Math.round(sector.getCenterY()) == Math.round(centerY))){
                     if(!sector.neighbours.contains(this)) sector.neighbours.add(this);
                     if(!neighbours.contains(sector)) neighbours.add(sector);
                 }
@@ -81,7 +82,8 @@ public class Sector extends BetterPolygon {
             double centerY = getCenterY() + 2 * yDiff;
             boolean addNeighbour = true;
             for(Sector sector : Main.sectors){
-                if(Math.round(sector.getCenterX())  == Math.round(centerX) && Math.round(sector.getCenterY()) == Math.round(centerY)){
+                if((Math.floor(sector.getCenterX())  == Math.floor(centerX) || Math.round(sector.getCenterX()) == Math.round(centerX))
+                        && (Math.floor(sector.getCenterY()) == Math.floor(centerY) || Math.round(sector.getCenterY()) == Math.round(centerY))){
                     addNeighbour = false;
                     break;
                 }
@@ -139,7 +141,7 @@ public class Sector extends BetterPolygon {
                         player2Count--;
                     }
                 }
-                System.out.println("lolllllll");
+                if(winner != 0) setPlayer(winner);
             }
         }
     }
