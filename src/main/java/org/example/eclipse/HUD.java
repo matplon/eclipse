@@ -22,6 +22,7 @@ public class HUD {
     static int pointsPlayer1;
     static int pointsPlayer2;
     static Text priceOfBasicShip = new Text();
+    static Text priceOfSillyShip = new Text();
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -133,6 +134,7 @@ public class HUD {
             if(!Main.root.getChildren().contains(currentPoints)) Main.root.getChildren().add(currentPoints);
             if(!Main.root.getChildren().contains(priceOfBasicShip)) Main.root.getChildren().add(priceOfBasicShip);
             if(!Main.root.getChildren().contains(imageView)) Main.root.getChildren().add(imageView);
+            if(!Main.root.getChildren().contains(availableShips)) Main.root.getChildren().add(availableShips);
         }
         else{
             currentPhase.setText("Battle");

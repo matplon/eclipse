@@ -35,6 +35,7 @@ public class Main extends Application {
     static List<Integer> numOfShipsToDeploy = new ArrayList<>();
     static Phase phase = Phase.STARTING_SECTORS;
     static int player = 1;
+    static int movedThisRound = 0;
     Sector chosenSector;
     Spaceship chosenShip;
     boolean deployingShip = false;
@@ -151,15 +152,16 @@ public class Main extends Application {
                     }
                     if(sector != null){
                         System.out.println("lol");
-                        if(Sector.ifConnected(chosenShip.sector, sector)){
+                        if(Sector.ifConnected(chosenShip.sector, sector) && movedThisRound < 3){
+                            movedThisRound++;
                             root.getChildren().remove(chosenShip);
                             chosenShip.sector.spaceships.remove(chosenShip);
                             chosenShip.moveTo(x, y);
                             chosenShip.sector = sector;
                             sector.spaceships.add(chosenShip);
                             root.getChildren().add(chosenShip);
-                            chosenShip = null;
                         }
+                        chosenShip = null;
                     }
                 }
                 else if(deployingShip){
@@ -212,10 +214,12 @@ public class Main extends Application {
             else if(keyEvent.getCode() == KeyCode.ENTER && phase == Phase.SHIPS && chosenShip == null){
                 if(player == 1){
                     player = 2;
+                    movedThisRound = 0;
                 }
                 else{
                     player = 1;
                     phase = Phase.BATTLES;
+                    movedThisRound = 0;
                 }
             }
             else if(keyEvent.getCode() == KeyCode.E && phase == Phase.SHIPS && chosenShip == null && numOfShipsToDeploy.get(player-1) > 0){
@@ -261,8 +265,8 @@ public class Main extends Application {
     }
 
     private static void winnerWinnerChickenDinner(int player) {
-        root.getChildren().clear();
 
+        root.getChildren().clear();
         Text winText = new Text();
         winText.setText("WINNER WINNER CHICKEN DINNER \n CONGRATULATIONS PLAYER" + " " + player );
         if (player == 1) {
