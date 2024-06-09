@@ -34,8 +34,8 @@ public class Main extends Application {
     static Glow glow = new Glow(1);
     List<Spaceship> spaceships = new ArrayList<>();
     List<Integer> numOfShipsToDeploy = new ArrayList<>();
-    Phase phase = Phase.STARTING_SECTORS;
-    int player = 1;
+    static Phase phase = Phase.STARTING_SECTORS;
+    static int player = 1;
     Sector chosenSector;
     Spaceship chosenShip;
     boolean deployingShip = false;
@@ -88,7 +88,7 @@ public class Main extends Application {
             if(phase == Phase.STARTING_SECTORS && mouseEvent.getButton() == MouseButton.PRIMARY){
                 Point2D clickPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
                 for(Sector sector : sectors){
-                    if(sector.contains(clickPoint) && sector.player == 0 && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
+                    if(sector.contains(clickPoint) && sector.player == 0 && !sector.isHidden && (sector.getCenterX() != WIDTH / 2 || sector.getCenterY() != HEIGHT/2)){
                         sector.setPlayer(player);
                         player++;
                         break;
@@ -120,7 +120,7 @@ public class Main extends Application {
                             break;
                         }
                         else{
-                            for(Spaceship spaceship : chosenSector.spaceships){
+                            for(Spaceship spaceship : neighbour.spaceships){
                                 if(spaceship.player == player){
                                     sectorValid = true;
                                     break;
@@ -150,6 +150,7 @@ public class Main extends Application {
                         }
                     }
                     if(sector != null){
+                        System.out.println("lol");
                         if(Sector.ifConnected(chosenShip.sector, sector)){
                             root.getChildren().remove(chosenShip);
                             chosenShip.sector.spaceships.remove(chosenShip);
@@ -179,7 +180,7 @@ public class Main extends Application {
                 }
                 else{
                     for(Spaceship spaceship : spaceships){
-                        if(spaceship.getLayoutBounds().contains(point2D)){
+                        if(spaceship.getLayoutBounds().contains(point2D) && spaceship.player == player){
                             chosenShip = spaceship;
                             break;
                         }
@@ -224,6 +225,8 @@ public class Main extends Application {
         for(Sector sector : sectors){
             sector.battle();
         }
+        phase = Phase.SECTORS;
+        player = 1;
     }
 
     public static void main(String[] args) {

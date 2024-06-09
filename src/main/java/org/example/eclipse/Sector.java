@@ -117,14 +117,17 @@ public class Sector extends BetterPolygon {
                 int winner = actuallyBatle(player1.player, player2.player);
                 if(winner == player1.player){
                     spaceships.remove(player2);
+                    Main.root.getChildren().remove(player2);
                     if(player2.player == 1) player1Count--;
                     else player2Count--;
                 }
                 else if(winner == player2.player){
                     spaceships.remove(player1);
+                    Main.root.getChildren().remove(player1);
                     if(player1.player == 1) player1Count--;
                     else player2Count--;
                 }
+                System.out.println("lolllllll");
             }
         }
     }
@@ -169,7 +172,10 @@ public class Sector extends BetterPolygon {
 
     static public boolean ifConnected(Sector sector1, Sector sector2){
         if(sector1.equals(sector2)) return true;
-        if(!sector1.neighbours.contains(sector2)) return false;
+        if(!sector1.neighbours.contains(sector2)){
+            System.out.println("haha imagine");
+            return false;
+        }
         for(Side side1 : sector1.sides){
             for(Side side2 : sector2.sides){
                 double side1MidX = Math.round((side1.getStartX() + side1.getEndX())/2);
