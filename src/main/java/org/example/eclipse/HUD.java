@@ -18,6 +18,7 @@ public class HUD {
     static Text currentPlayer = new Text();
     static Text currentPhase = new Text();
     static Text currentPoints = new Text();
+    static Text hintText = new Text();
     static ImageView dice;
     static Button roll = new Button("Roll");
     static int pointsPlayer1;
@@ -43,6 +44,13 @@ public class HUD {
         currentPoints.setX(Main.WIDTH - 400);
         currentPoints.setY(150);
 
+        hintText.setText("Press E, then LMB to deploy a new ship\nIn order to move a ship, click on it,\nthen click where you want to move it");
+        hintText.setFont(font);
+        hintText.setStroke(Color.GREEN);
+        hintText.setX(20);
+        hintText.setY(50);
+
+        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints);
         String filepath = "spaceship.png";
         ImageView imageView = new ImageView("file:"+filepath);
         imageView.setY(160);
@@ -89,12 +97,14 @@ public class HUD {
         }
         else if(phase == Main.Phase.SHIPS){
             currentPhase.setText("Prepare your ships");
+            if(!Main.root.getChildren().contains(hintText)) Main.root.getChildren().add(hintText);
         }
         else if(phase == Main.Phase.SECTORS){
             currentPhase.setText("Choose a new sector");
         }
         else{
             currentPhase.setText("Battle");
+            Main.root.getChildren().remove(hintText);
             Main.startBattles();
         }
     }

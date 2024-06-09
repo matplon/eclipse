@@ -189,7 +189,6 @@ public class Sector extends BetterPolygon {
     static public boolean ifConnected(Sector sector1, Sector sector2){
         if(sector1.equals(sector2)) return true;
         if(!sector1.neighbours.contains(sector2)){
-            System.out.println("haha imagine");
             return false;
         }
         for(Side side1 : sector1.sides){
