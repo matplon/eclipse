@@ -24,6 +24,7 @@ public class HUD {
     static int pointsPlayer1;
     static int pointsPlayer2;
     static Text priceOfBasicShip = new Text();
+    static Text priceOfSillyShip = new Text();
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -55,7 +56,7 @@ public class HUD {
         imageView.setY(160);
         imageView.setFitHeight(60);
         imageView.setFitWidth(60);
-        imageView.setX(Main.WIDTH - 400);
+        imageView.setX(Main.WIDTH - 350);
 
         priceOfBasicShip.setText("Buy for 3 Points");
         priceOfBasicShip.setFont(font);
@@ -63,7 +64,20 @@ public class HUD {
         priceOfBasicShip.setX(Main.WIDTH - 400);
         priceOfBasicShip.setY(250);
 
-        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints, imageView, priceOfBasicShip);
+        String filepath1 = "ufo.png";
+        ImageView imageView1 = new ImageView("file:"+filepath1);
+        imageView1.setY(210);
+        imageView1.setFitHeight(60);
+        imageView1.setFitWidth(60);
+        imageView1.setX(Main.WIDTH - 350);
+
+        priceOfSillyShip.setText("Buy for 5 Points");
+        priceOfSillyShip.setFont(font);
+        priceOfSillyShip.setStroke(Color.BLUE);
+        priceOfSillyShip.setX(Main.WIDTH - 400);
+        priceOfSillyShip.setY(300);
+
+        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints, imageView, priceOfBasicShip, priceOfSillyShip, imageView1);
         Main.scene.setFill(Color.BLACK);
     }
 
