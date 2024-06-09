@@ -106,21 +106,19 @@ public class Sector extends BetterPolygon {
         }
         if(player1Count > 0 && player2Count > 0){
             while(player1Count > 0 && player2Count > 0){
-                Spaceship player1 = spaceships.get(0);
-                Spaceship player2 = null;
+                Spaceship ship1 = spaceships.get(0);
+                Spaceship ship2 = null;
                 for (int i = 1; i < spaceships.size(); i++) {
-                    if(spaceships.get(i).player != player1.player){
-                        player2 = spaceships.get(i);
+                    if(spaceships.get(i).player != ship1.player){
+                        ship2 = spaceships.get(i);
                         break;
                     }
                 }
-                int winner = actuallyBatle(player1.player, player2.player);
-                if(winner == player1.player) {
-                    spaceships.remove(player2);
-                    Main.root.getChildren().remove(player2);
-                    if(player2.player == 1) player1Count--;
-                    else player2Count--;
-                    if(player2.player == 1) {
+                int winner = actuallyBatle(ship1.player, ship2.player);
+                if(winner == ship1.player) {
+                    spaceships.remove(ship2);
+                    Main.root.getChildren().remove(ship2);
+                    if(ship2.player == 1) {
                         HUD.pointsPlayer2++;
                         player1Count--;
                     }
@@ -129,12 +127,10 @@ public class Sector extends BetterPolygon {
                         player2Count--;
                     }
                 }
-                else if(winner == player2.player){
-                    spaceships.remove(player1);
-                    Main.root.getChildren().remove(player1);
-                    if(player1.player == 1) player1Count--;
-                    else player2Count--;
-                    if(player1.player == 1) {
+                else if(winner == ship2.player){
+                    spaceships.remove(ship1);
+                    Main.root.getChildren().remove(ship1);
+                    if(ship1.player == 1) {
                         HUD.pointsPlayer2++;
                         player1Count--;
                     }

@@ -245,11 +245,16 @@ public class Main extends Application {
     }
 
     public static void startBattles(){
+        int ships1 = 0;
+        int ships2 = 0;
         for(Sector sector : sectors){
             sector.battle();
+            ships1 += (int)(sector.spaceships.stream().filter(s -> s.player == 1).count());
+            ships2 += (int)(sector.spaceships.stream().filter(s -> s.player == 2).count());
         }
         phase = Phase.SECTORS;
         player = 1;
+
     }
 
     public static void main(String[] args) {
