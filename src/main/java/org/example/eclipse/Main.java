@@ -217,6 +217,18 @@ public class Main extends Application {
                 deployingShip = true;
                 numOfShipsToDeploy.set(player-1, numOfShipsToDeploy.get(player-1)-1);
             }
+            else if(keyEvent.getCode() == KeyCode.BACK_SPACE && phase == Phase.SECTORS && chosenSector != null){
+                chosenSector.hide();
+                chosenSector.reroll();
+                chosenSector = null;
+                if(player == 2){
+                    player = 1;
+                    phase = Phase.SHIPS;
+                }
+                else{
+                    player = 2;
+                }
+            }
             HUD.update(player, phase);
         });
     }
