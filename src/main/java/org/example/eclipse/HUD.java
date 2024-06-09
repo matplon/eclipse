@@ -50,7 +50,6 @@ public class HUD {
         hintText.setX(20);
         hintText.setY(50);
 
-        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints);
         String filepath = "spaceship.png";
         ImageView imageView = new ImageView("file:"+filepath);
         imageView.setY(160);

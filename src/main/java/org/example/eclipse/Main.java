@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,7 +35,7 @@ public class Main extends Application {
     static List<Sector> sectors = new ArrayList<>();
     static Glow glow = new Glow(1);
     List<Spaceship> spaceships = new ArrayList<>();
-    List<Integer> numOfShipsToDeploy = new ArrayList<>();
+    static List<Integer> numOfShipsToDeploy = new ArrayList<>();
     static Phase phase = Phase.STARTING_SECTORS;
     static int player = 1;
     Sector chosenSector;
@@ -47,8 +49,8 @@ public class Main extends Application {
         stage.show();
         generateSectors();
         keyEvents();
-        numOfShipsToDeploy.add(5);
-        numOfShipsToDeploy.add(5);
+        numOfShipsToDeploy.add(1);
+        numOfShipsToDeploy.add(1);
         HUD.init();
     }
 
@@ -244,7 +246,8 @@ public class Main extends Application {
         });
     }
 
-    public static void startBattles(){
+    public static void startBattles() {
+
         int ships1 = 0;
         int ships2 = 0;
         for(Sector sector : sectors){
@@ -254,6 +257,33 @@ public class Main extends Application {
         }
         phase = Phase.SECTORS;
         player = 1;
+
+
+        if (ships1 == 0 && HUD.pointsPlayer1 < 3 && numOfShipsToDeploy.get(0) == 0) {
+            winnerWinnerChickenDinner(2);
+        }
+        else if (ships2 == 0 && HUD.pointsPlayer2 < 3 && numOfShipsToDeploy.get(1) == 0){
+            winnerWinnerChickenDinner(1);
+        }
+
+    }
+
+    private static void winnerWinnerChickenDinner(int player) {
+        root.getChildren().clear();
+
+        Text winText = new Text();
+        winText.setText("WINNER WINNER CHICKEN DINNER \n CONGRATULATIONS PLAYER" + " " + player);
+        if (player == 1) {
+            winText.setStroke(Color.BLUE);
+        }
+        if (player == 2) {
+            winText.setStroke(Color.RED);
+        }
+        Font font = Font.font("Roboto", 76);
+        winText.setFont(font);
+        winText.setX(300);
+        winText.setY(HEIGHT/2);
+        root.getChildren().add(winText);
 
     }
 
