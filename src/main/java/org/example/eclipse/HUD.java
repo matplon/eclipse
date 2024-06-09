@@ -22,6 +22,7 @@ public class HUD {
     static Button roll = new Button("Roll");
     static int pointsPlayer1;
     static int pointsPlayer2;
+    static Text priceOfBasicShip = new Text();
 
     public static void init(){
         currentPlayer.setText("Turn: Player 1");
@@ -42,7 +43,20 @@ public class HUD {
         currentPoints.setX(Main.WIDTH - 400);
         currentPoints.setY(150);
 
-        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints);
+        String filepath = "spaceship.png";
+        ImageView imageView = new ImageView("file:"+filepath);
+        imageView.setY(160);
+        imageView.setFitHeight(60);
+        imageView.setFitWidth(60);
+        imageView.setX(Main.WIDTH - 400);
+
+        priceOfBasicShip.setText("Buy for 3 Points");
+        priceOfBasicShip.setFont(font);
+        priceOfBasicShip.setStroke(Color.BLUE);
+        priceOfBasicShip.setX(Main.WIDTH - 400);
+        priceOfBasicShip.setY(250);
+
+        Main.root.getChildren().addAll(currentPlayer, currentPhase, currentPoints, imageView, priceOfBasicShip);
         Main.scene.setFill(Color.BLACK);
     }
 
@@ -51,13 +65,13 @@ public class HUD {
         if (player == 1) {
             currentPoints.setText("Points:"+ " " + pointsPlayer1);
             currentPoints.setStroke(Color.BLUE);
-
+            priceOfBasicShip.setStroke(Color.BLUE);
         }
         if (player == 2) {
             currentPoints.setText("Points:"+ " " + pointsPlayer2);
             currentPoints.setStroke(Color.RED);
+            priceOfBasicShip.setStroke(Color.RED);
         }
-
         if(phase == Main.Phase.BATTLES){
             currentPlayer.setVisible(false);
         }

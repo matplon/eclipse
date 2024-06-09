@@ -139,6 +139,17 @@ public class Main extends Application {
                 }
             }
             else if(mouseEvent.getButton() == MouseButton.PRIMARY && phase == Phase.SHIPS){
+                HUD.priceOfBasicShip.setOnMouseClicked(event -> {
+                    if (player == 1 && HUD.pointsPlayer1 >= 3) {
+                        numOfShipsToDeploy.set(0, numOfShipsToDeploy.get(0) + 1);
+                        HUD.pointsPlayer1 -= 3;
+                    }
+                    if (player == 2 && HUD.pointsPlayer2 >= 3) {
+                        numOfShipsToDeploy.set(1, numOfShipsToDeploy.get(1) + 1);
+                        HUD.pointsPlayer2 -= 3;
+                    }
+                });
+
                 double x = mouseEvent.getX(), y = mouseEvent.getY();
                 Point2D point2D = new Point2D(x, y);
                 if(chosenShip != null){
