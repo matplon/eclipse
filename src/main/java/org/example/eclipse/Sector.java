@@ -115,15 +115,27 @@ public class Sector extends BetterPolygon {
                     }
                 }
                 int winner = actuallyBatle(player1.player, player2.player);
-                if(winner == player1.player){
+                if(winner == player1.player) {
                     spaceships.remove(player2);
-                    if(player2.player == 1) player1Count--;
-                    else player2Count--;
+                    if(player2.player == 1) {
+                        HUD.pointsPlayer2++;
+                        player1Count--;
+                    }
+                    else {
+                        HUD.pointsPlayer1++;
+                        player2Count--;
+                    }
                 }
                 else if(winner == player2.player){
                     spaceships.remove(player1);
-                    if(player1.player == 1) player1Count--;
-                    else player2Count--;
+                    if(player1.player == 1) {
+                        HUD.pointsPlayer2++;
+                        player1Count--;
+                    }
+                    else {
+                        HUD.pointsPlayer1++;
+                        player2Count--;
+                    }
                 }
             }
         }
