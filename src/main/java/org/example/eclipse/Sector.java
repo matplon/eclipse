@@ -215,4 +215,9 @@ public class Sector extends BetterPolygon {
         background.setFill(color);
         Main.root.getChildren().add(background);
     }
+
+    public void reroll(){
+        sides.clear();
+        generateSides();
+    }
 }
